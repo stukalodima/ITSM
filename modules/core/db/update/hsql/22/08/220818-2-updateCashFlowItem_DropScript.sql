@@ -1,0 +1,1 @@
+alter table FINANCE_CASH_FLOW_ITEM drop column PAYMENT_REGISTER_TYPE_ID__U55670 cascade ;
