@@ -1,0 +1,39 @@
+@import "helium-defaults";
+@import "com.itk.finance/helium-ext-defaults";
+@import "app-components";
+@import "com.itk.finance/helium-ext";
+
+.helium {
+  // include auto-generated app components SCSS
+  @include app_components;
+
+  @include com_itk_finance-helium-ext;
+
+  .v-table-row,
+  .v-table-row-odd {
+    &.rejected {
+      color: red !important;
+      font-weight: bold;
+      .c-grouptable-group-cell-expander:before {
+        color: red !important;
+      }
+    }
+  }
+
+  .v-table-row,
+  .v-table-row-odd {
+    &.terminated {
+      color: #ffc90e !important;
+      font-weight: bold;
+      .c-grouptable-group-cell-expander:before {
+        color: #ffc90e !important;
+      }
+    }
+  }
+
+  .remains-on-date {
+    font-size: 14pt;
+    font-weight: bold;
+    color: green;
+  }
+}
