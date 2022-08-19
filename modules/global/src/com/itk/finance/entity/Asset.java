@@ -1,5 +1,6 @@
 package com.itk.finance.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 @Table(name = "FINANCE_ASSET")
 @Entity(name = "finance_Asset")
+@NamePattern("%s|shortName")
 public class Asset extends StandardEntity {
     private static final long serialVersionUID = -5651140306752589601L;
 
@@ -45,20 +47,28 @@ public class Asset extends StandardEntity {
 
 
     @Column(name = "ACTIVE")
-    private boolean active;
+    private Boolean isActive;
 
     @Column(name = "INITIAL_COST")
-    private Float initial_cost;
+    private Double initialCost;
 
 
     @Column(name = "RESIDUAL_COST")
-    private Float residual_cost;
+    private Double residualCost;
 
     @Column(name = "ASSET_STATES")
-    private AssetStates assetStates;
+    private String assetStates;
 
     @Column(name = "COMMENT")
     private String comment;
+
+    public void setAssetStates(AssetStates assetStates) {
+        this.assetStates = assetStates == null ? null : assetStates.getId();
+    }
+
+    public AssetStates getAssetStates() {
+        return assetStates == null ? null : AssetStates.fromId(assetStates);
+    }
 
     public String getShortName() {
         return shortName;
@@ -116,36 +126,28 @@ public class Asset extends StandardEntity {
         this.expiry_date = expiry_date;
     }
 
-    public boolean isActive() {
-        return active;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Float getInitial_cost() {
-        return initial_cost;
+    public Double getInitialCost() {
+        return initialCost;
     }
 
-    public void setInitial_cost(Float initial_cost) {
-        this.initial_cost = initial_cost;
+    public void setInitialCost(Double initialCost) {
+        this.initialCost = initialCost;
     }
 
-    public Float getResidual_cost() {
-        return residual_cost;
+    public Double getResidualCost() {
+        return residualCost;
     }
 
-    public void setResidual_cost(Float residual_cost) {
-        this.residual_cost = residual_cost;
-    }
-
-    public AssetStates getAssetStates() {
-        return assetStates;
-    }
-
-    public void setAssetStates(AssetStates assetStates) {
-        this.assetStates = assetStates;
+    public void setResidualCost(Double residualCost) {
+        this.residualCost = residualCost;
     }
 
     public String getComment() {

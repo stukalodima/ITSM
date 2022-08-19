@@ -504,9 +504,45 @@ create table FINANCE_ASSET (
     RESPONSIBLE_BUSINESS varchar(36),
     COMMISSIONING_DATE timestamp,
     EXPIRY_DATE timestamp,
+    ACTIVE boolean,
+    INITIAL_COST double precision,
+    RESIDUAL_COST double precision,
     ASSET_STATES varchar(50),
     COMMENT varchar(255),
     --
     primary key (ID)
 )^
 -- end FINANCE_ASSET
+-- begin FINANCE_SUBDIVISION
+create table FINANCE_SUBDIVISION (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255) not null,
+    --
+    primary key (ID)
+)^
+-- end FINANCE_SUBDIVISION
+-- begin FINANCE_UNIT_MEASURE
+create table FINANCE_UNIT_MEASURE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(25) not null,
+    FULL_NAME varchar(100),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_UNIT_MEASURE
