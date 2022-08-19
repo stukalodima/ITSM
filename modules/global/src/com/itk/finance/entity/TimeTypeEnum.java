@@ -10,7 +10,7 @@ public enum TimeTypeEnum implements EnumClass<String> {
     PLANNED("PLANNED"),
     ACTUAL("ACTUAL");
 
-    private final String id;
+    private String id;
 
     TimeTypeEnum(String value) {
         this.id = value;
