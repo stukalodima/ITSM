@@ -486,3 +486,19 @@ alter table BPM_PROC_INSTANCE add column PAYMENT_REGISTER_ID varchar(36) ^
 alter table BPM_PROC_INSTANCE add column DTYPE varchar(31) ^
 update BPM_PROC_INSTANCE set DTYPE = 'finance_ExtProcInstance' where DTYPE is null ^
 -- end BPM_PROC_INSTANCE
+-- begin FINANCE_STATUSES
+create table FINANCE_STATUSES (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_STATUSES
