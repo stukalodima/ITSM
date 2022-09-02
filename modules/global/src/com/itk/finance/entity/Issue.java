@@ -9,6 +9,7 @@ import com.haulmont.cuba.security.entity.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "FINANCE_ISSUE")
 @Entity(name = "finance_Issue")
@@ -34,11 +35,21 @@ public class Issue extends StandardEntity {
     private String description;
 
     @NotNull
-    @Column(name = "AUTHOR")
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHOR_ID")
     private User author;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue")
+    private List<IssueFile> issueFiles;
+
+    public List<IssueFile> getIssueFiles() {
+        return issueFiles;
+    }
+
+    public void setIssueFiles(List<IssueFile> issueFiles) {
+        this.issueFiles = issueFiles;
+    }
 
     public Date getOnDate() {
         return onDate;
