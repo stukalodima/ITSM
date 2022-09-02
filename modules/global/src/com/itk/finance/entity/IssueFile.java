@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 public class IssueFile extends StandardEntity {
     private static final long serialVersionUID = -6424743476416682915L;
 
-    @Composition
-    @OneToOne(fetch = FetchType.LAZY)
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOCUMENT_ID")
     private FileDescriptor document;
 

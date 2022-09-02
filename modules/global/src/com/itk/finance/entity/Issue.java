@@ -1,5 +1,6 @@
 package com.itk.finance.entity;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
@@ -40,6 +41,7 @@ public class Issue extends StandardEntity {
     @JoinColumn(name = "AUTHOR_ID")
     private User author;
 
+    @Composition
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue")
     private List<IssueFile> issueFiles;
 
