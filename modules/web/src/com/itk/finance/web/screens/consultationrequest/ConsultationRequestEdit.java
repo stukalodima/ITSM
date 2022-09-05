@@ -34,7 +34,7 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
     @Inject
     private UniqueNumbersService uniqueNumbersService;
     @Inject
-    private TextField<Long> numberField;
+    private TextField<String> numberField;
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -49,8 +49,9 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue()==0) {
-            getEditedEntity().setNumber(uniqueNumbersService.getNextNumber(ConsultationRequest.class.getSimpleName()));
+        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue().isEmpty()) {
+            long newNumber = uniqueNumbersService.getNextNumber(ConsultationRequest.class.getSimpleName());
+            getEditedEntity().setNumber(Long.toString(newNumber));
             event.resume();
         }
     }
@@ -62,16 +63,21 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
 
     @Subscribe("businessField")
     public void onBusinessFieldValueChange(HasValue.ValueChangeEvent<Business> event) {
-        if (!Objects.isNull(companyField.getValue()) && !Objects.equals(companyField.getValue().getBusiness(), event.getValue())) {
-            companyField.setValue(companyField.getEmptyValue());
-        }
-
         if (event.isUserOriginated()) {
+            if (!Objects.isNull(companyField.getValue()) && !Objects.equals(companyField.getValue().getBusiness(), event.getValue())) {
+                companyField.setValue(companyField.getEmptyValue());
+            }
             refreshForm();
         }
     }
 
     @Subscribe("companyField")
     public void onCompanyFieldFieldValueChange(HasValue.ValueChangeEvent<Company> event) {
+        if (event.isUserOriginated()) {
+            if (!Objects.isNull(companyField.getValue()) && !Objects.equals(businessField.getValue(), event.getValue().getBusiness())) {
+                businessField.setValue(companyField.getValue().getBusiness());
+            }
+            refreshForm();
+        }
     }
 }

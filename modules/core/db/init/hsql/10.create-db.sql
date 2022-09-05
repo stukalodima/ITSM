@@ -562,3 +562,25 @@ create table FINANCE_STATUSES (
     primary key (ID)
 )^
 -- end FINANCE_STATUSES
+-- begin FINANCE_CONSULTATION_REQUEST
+create table FINANCE_CONSULTATION_REQUEST (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NUMBER varchar(255),
+    ON_DATE timestamp,
+    BUSINESS_ID varchar(36),
+    COMPANY_ID varchar(36),
+    AUTHOR_ID varchar(36),
+    EXECUTOR_ID varchar(36),
+    DETAILED_DESCRIPTION longvarchar,
+    --
+    primary key (ID)
+)^
+-- end FINANCE_CONSULTATION_REQUEST
