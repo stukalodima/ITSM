@@ -562,6 +562,43 @@ create table FINANCE_STATUSES (
     primary key (ID)
 )^
 -- end FINANCE_STATUSES
+-- begin FINANCE_ISSUE
+create table FINANCE_ISSUE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ON_DATE date,
+    NUMBER_ bigint,
+    TOPIC longvarchar,
+    DESCRIPTION longvarchar,
+    AUTHOR_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_ISSUE
+-- begin FINANCE_ISSUE_FILE
+create table FINANCE_ISSUE_FILE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    DOCUMENT_ID varchar(36),
+    ISSUE_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_ISSUE_FILE
 -- begin FINANCE_CONSULTATION_REQUEST
 create table FINANCE_CONSULTATION_REQUEST (
     ID varchar(36) not null,
