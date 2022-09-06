@@ -24,7 +24,7 @@ public class Issue extends StandardEntity {
     private Date onDate;
 
     @NotNull
-    @Column(name = "NUMBER_")
+    @Column(name = "NUMBER")
     private Long number;
 
     @Column(name = "TOPIC")
