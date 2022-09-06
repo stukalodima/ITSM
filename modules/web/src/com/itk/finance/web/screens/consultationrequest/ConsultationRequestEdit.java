@@ -7,10 +7,10 @@ import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.HasValue;
 import com.haulmont.cuba.gui.components.LookupPickerField;
-import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.settings.Settings;
 import com.itk.finance.entity.*;
 
 import javax.inject.Inject;
@@ -42,11 +42,12 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
     public void onBeforeShow(BeforeShowEvent event) {
         businessesDl.load();
         refreshForm();
+        if (entityStates.isNew(getEditedEntity())){
+        }
     }
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
-        refreshForm();
     }
 
     @Subscribe
@@ -83,15 +84,18 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
         }
     }
 
-    public void addNewIssues() {
+    public void addNewHotFixRequest() {
         TimeSource timeSource = AppBeans.get(TimeSource.class);
 
-        Screen newIssuesScreen = screenBuilders.editor(Issue.class, this)
+        Screen newIssuesScreen = screenBuilders.editor(HotFixRequest.class, this)
                 .newEntity()
                 .withInitializer(issue -> {
                     issue.setOnDate(timeSource.currentTimestamp());
+                    issue.setBusiness(getEditedEntity().getBusiness());
+                    issue.setCompany(getEditedEntity().getCompany());
                     issue.setDescription(getEditedEntity().getDetailedDescription());
                 })
+                //.withLaunchMode(OpenMode.DIALOG)
                 .build();
         newIssuesScreen.show();
     }
