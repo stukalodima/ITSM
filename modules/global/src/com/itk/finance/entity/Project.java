@@ -16,7 +16,8 @@ import java.util.Date;
 public class Project extends StandardEntity {
     private static final long serialVersionUID = -5158221038190091896L;
 
-    @Column(name = "NAME", nullable = false, length = 100)
+    @NotNull
+    @Column(name = "NAME")
     private String name;
 
     @JoinColumn(name = "PARENT_ID")
@@ -43,12 +44,10 @@ public class Project extends StandardEntity {
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     private User manager;
 
-    @Column(name = "DESCRIPTION", length = 250)
+    @Column(name = "DESCRIPTION")
     @Lob
     private String description;
 
-    public Project() {
-    }
 
     public String getName() {
         return name;
