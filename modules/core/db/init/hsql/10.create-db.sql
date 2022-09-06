@@ -617,6 +617,7 @@ create table FINANCE_CONSULTATION_REQUEST (
     AUTHOR_ID varchar(36),
     EXECUTOR_ID varchar(36),
     DETAILED_DESCRIPTION longvarchar,
+    ISSUES_ID varchar(36),
     --
     primary key (ID)
 )^

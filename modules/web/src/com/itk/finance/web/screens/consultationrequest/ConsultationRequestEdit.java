@@ -1,17 +1,17 @@
 package com.itk.finance.web.screens.consultationrequest;
 
 import com.haulmont.cuba.core.app.UniqueNumbersService;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.EntityStates;
+import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.HasValue;
 import com.haulmont.cuba.gui.components.LookupPickerField;
 import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
-import com.itk.finance.entity.Business;
-import com.itk.finance.entity.Company;
-import com.itk.finance.entity.ConsultationRequest;
-import com.itk.finance.entity.PaymentClaim;
+import com.itk.finance.entity.*;
 
 import javax.inject.Inject;
 import java.util.Objects;
@@ -35,6 +35,8 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
     private UniqueNumbersService uniqueNumbersService;
     @Inject
     private TextField<String> numberField;
+    @Inject
+    private ScreenBuilders screenBuilders;
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -79,5 +81,18 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
             }
             refreshForm();
         }
+    }
+
+    public void addNewIssues() {
+        TimeSource timeSource = AppBeans.get(TimeSource.class);
+
+        Screen newIssuesScreen = screenBuilders.editor(Issue.class, this)
+                .newEntity()
+                .withInitializer(issue -> {
+                    issue.setOnDate(timeSource.currentTimestamp());
+                    issue.setDescription(getEditedEntity().getDetailedDescription());
+                })
+                .build();
+        newIssuesScreen.show();
     }
 }

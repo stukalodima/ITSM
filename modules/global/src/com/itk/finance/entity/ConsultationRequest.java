@@ -54,6 +54,10 @@ public class ConsultationRequest extends StandardEntity {
     @Column(name = "DETAILED_DESCRIPTION")
     protected String detailedDescription;
 
+    @JoinColumn(name = "ISSUES_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Issue issue;
+
     public String getNumber() {
         return number;
     }
@@ -110,6 +114,13 @@ public class ConsultationRequest extends StandardEntity {
         this.detailedDescription = detailedDescription;
     }
 
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
+    }
     @PostConstruct
     public void initEntity() {
         TimeSource timeSource = AppBeans.get(TimeSource.class);
