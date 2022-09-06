@@ -4,33 +4,35 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.security.entity.User;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Table(name = "FINANCE_HOT_FIX_REQUEST")
 @Entity(name = "finance_HotFixRequest")
-@NamePattern("%s %s|number,date")
+@NamePattern("%s %s|number,onDate")
 
 public class HotFixRequest extends StandardEntity {
     private static final long serialVersionUID = 8831658319149966013L;
 
-    @NotNull
     @Column(name = "NUMBER")
-    private String number;
+    private Long number;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE")
-    private Date date;
+    private Date onDate;
 
-//    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "APPEAL_ID")
-//    private APPEAL appeal;
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ISSUE_ID")
+    private Issue issue;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
@@ -45,15 +47,9 @@ public class HotFixRequest extends StandardEntity {
     private Business business;
 
     @Lob
-    @Column(name = "ADDITIONAL_DESCRIPTION")
-    private String additionalDescription;
+    @Column(name = "DESCRIPTION")
+    private String description;
 
-
-//    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "STATUS_ID")
-//    private Statuses status;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
@@ -61,33 +57,30 @@ public class HotFixRequest extends StandardEntity {
     @JoinColumn(name = "EXECUTOR_ID")
     private User executor;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
     private Date startDate;
 
+    @PostConstruct
+    public void initEntity (Metadata metadata){
+        TimeSource timeSource = AppBeans.get(TimeSource.class);
+                onDate = timeSource.currentTimestamp();
+   }
 
-//    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "EXECUTION_STATE_ID")
-//    private ExecutionState executionState;
-
-
-    public String getNumber() {
+    public Long getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(Long number) {
         this.number = number;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getOnDate() {
+        return onDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setOnDate(Date onDate) {
+        this.onDate = onDate;
     }
 
     public Company getCompany() {
@@ -124,11 +117,19 @@ public class HotFixRequest extends StandardEntity {
         this.startDate = startDate;
     }
 
-    public String getAdditionalDescription() {
-        return additionalDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAdditionalDescription(String additionalDescription) {
-        this.additionalDescription = additionalDescription;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 }
