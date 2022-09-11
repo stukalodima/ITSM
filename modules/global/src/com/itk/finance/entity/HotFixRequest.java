@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
@@ -12,12 +13,12 @@ import com.haulmont.cuba.security.entity.User;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Date;
 
 @Table(name = "FINANCE_HOT_FIX_REQUEST")
 @Entity(name = "finance_HotFixRequest")
 @NamePattern("%s %s|number,onDate")
-
+@PublishEntityChangedEvents
 public class HotFixRequest extends StandardEntity {
     private static final long serialVersionUID = 8831658319149966013L;
 

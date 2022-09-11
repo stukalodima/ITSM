@@ -46,14 +46,6 @@ public class HotFixRequestEdit extends StandardEditor<HotFixRequest> {
         refreshForm();
     }
 
-    @Subscribe
-    public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue() == 0) {
-            getEditedEntity().setNumber(uniqueNumbersService.getNextNumber(HotFixRequest.class.getSimpleName()));
-            event.resume();
-        }
-    }
-
     private void refreshForm() {
         companiesDl.setParameter("business", businessField.getValue());
         companiesDl.load();
