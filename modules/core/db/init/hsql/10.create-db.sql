@@ -645,3 +645,26 @@ create table FINANCE_HOT_FIX_REQUEST (
     primary key (ID)
 )^
 -- end FINANCE_HOT_FIX_REQUEST
+-- begin FINANCE_PROJECT
+create table FINANCE_PROJECT (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(100) not null,
+    PARENT_ID varchar(36),
+    NOT_RELEVANT boolean,
+    SHUT boolean,
+    START_DATE date,
+    END_DATE date,
+    MANAGER_ID varchar(36),
+    DESCRIPTION varchar(250),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_PROJECT
