@@ -1,6 +1,7 @@
 package com.itk.finance.service;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.itk.finance.entity.ConsultationRequest;
 import com.itk.finance.entity.HotFixRequest;
 import com.itk.finance.entity.Issue;
 import org.springframework.stereotype.Service;
@@ -23,5 +24,16 @@ public class IssueServiceBean implements IssueService {
         hotFixRequest.setDescription(issue.getDescription());
 
         return hotFixRequest;
+    }
+
+    @Override
+    public ConsultationRequest createConsultationRequest(Issue issue) {
+        ConsultationRequest consultationRequest = dataManager.create(ConsultationRequest.class);
+        consultationRequest.setBusiness(userPropertyService.getDefaultBusiness());
+        consultationRequest.setCompany(userPropertyService.getDefaultCompany());
+        consultationRequest.setIssue(issue);
+        consultationRequest.setDetailedDescription(issue.getDescription());
+
+        return consultationRequest;
     }
 }

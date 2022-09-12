@@ -52,6 +52,10 @@ public class ConsultationRequest extends StandardEntity {
     private User executor;
 
     @Lob
+    @Column(name = "TOPIC")
+    private String topic;
+
+    @Lob
     @Column(name = "DETAILED_DESCRIPTION")
     protected String detailedDescription;
 
@@ -158,6 +162,14 @@ public class ConsultationRequest extends StandardEntity {
 
     public void setConsultationRequestFiles(List<ConsultationRequestFile> consultationRequestFiles) {
         this.consultationRequestFiles = consultationRequestFiles;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     @PostConstruct

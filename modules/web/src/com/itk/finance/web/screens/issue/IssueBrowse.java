@@ -5,6 +5,7 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.screen.*;
+import com.itk.finance.entity.ConsultationRequest;
 import com.itk.finance.entity.HotFixRequest;
 import com.itk.finance.entity.Issue;
 import com.itk.finance.service.IssueService;
@@ -30,7 +31,7 @@ public class IssueBrowse extends StandardLookup<Issue> {
     public void onCreateRequestPopupCreateHotFix(Action.ActionPerformedEvent event) {
         Set<Issue> issueSet = issuesTable.getSelected();
         if (issueSet.isEmpty()) {
-            notifications.create().withCaption("Не выбрано обращение").withDescription("Выберите обращение!").show();
+            showNotificationIfSetEmpty();
             return;
         }
         issueSet.forEach(issue -> {
@@ -38,6 +39,23 @@ public class IssueBrowse extends StandardLookup<Issue> {
             screenBuilders.editor(HotFixRequest.class, this).editEntity(hotFixRequest).build().show();
         });
 
+    }
+
+    @Subscribe("createRequestPopup.createConsultationRequest")
+    public void onCreateRequestPopupCreateConsultationRequest(Action.ActionPerformedEvent event) {
+        Set<Issue> issueSet = issuesTable.getSelected();
+        if(issueSet.isEmpty()){
+            showNotificationIfSetEmpty();
+            return;
+        }
+        issueSet.forEach(issue -> {
+            ConsultationRequest consultationRequest = issueService.createConsultationRequest(issue);
+            screenBuilders.editor(ConsultationRequest.class, this).editEntity(consultationRequest).build().show();
+        });
+    }
+
+    private void showNotificationIfSetEmpty() {
+        notifications.create().withCaption("Не выбрано обращение").withDescription("Выберит обращение!").show();
     }
 
 }
