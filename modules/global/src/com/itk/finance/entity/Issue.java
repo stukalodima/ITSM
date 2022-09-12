@@ -5,27 +5,32 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.security.entity.User;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "FINANCE_ISSUE")
 @Entity(name = "finance_Issue")
 @NamePattern("%s %s|onDate,number")
 public class Issue extends StandardEntity {
     private static final long serialVersionUID = -2476676865281350898L;
-
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
     @Column(name = "ON_DATE")
     private Date onDate;
 
     @NotNull
-    @Column(name = "NUMBER_")
-    private Long number;
+    @Column(name = "NUMBER")
+    private String number;
 
     @Column(name = "TOPIC")
     @Lob
@@ -42,7 +47,7 @@ public class Issue extends StandardEntity {
     private User author;
 
     @Composition
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "issue")
+    @OneToMany(mappedBy = "issue")
     private List<IssueFile> issueFiles;
 
     public List<IssueFile> getIssueFiles() {
@@ -61,11 +66,11 @@ public class Issue extends StandardEntity {
         this.onDate = onDate;
     }
 
-    public Long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -91,6 +96,12 @@ public class Issue extends StandardEntity {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @PostConstruct
+    public void init() {
+        this.onDate = AppBeans.get(TimeSource.class).currentTimestamp();
+        this.author = AppBeans.get(UserSessionSource.class).getUserSession().getUser();
     }
 
 }
