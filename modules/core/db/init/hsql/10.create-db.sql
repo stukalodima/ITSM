@@ -618,6 +618,8 @@ create table FINANCE_CONSULTATION_REQUEST (
     EXECUTOR_ID varchar(36),
     DETAILED_DESCRIPTION longvarchar,
     ISSUES_ID varchar(36),
+    PROJECT_ID varchar(36),
+    ASSET_ID varchar(36),
     --
     primary key (ID)
 )^
@@ -656,15 +658,33 @@ create table FINANCE_PROJECT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NAME varchar(100) not null,
+    NAME varchar(255),
     PARENT_ID varchar(36),
     NOT_RELEVANT boolean,
     SHUT boolean,
     START_DATE date,
     END_DATE date,
     MANAGER_ID varchar(36),
-    DESCRIPTION varchar(250),
+    DESCRIPTION longvarchar,
     --
     primary key (ID)
 )^
 -- end FINANCE_PROJECT
+-- begin FINANCE_CONSULTATION_REQUEST_FILE
+create table FINANCE_CONSULTATION_REQUEST_FILE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    DOCUMENT_ID varchar(36),
+    CONSULTATION_REQUEST_ID varchar(36),
+    AUTHOR_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_CONSULTATION_REQUEST_FILE

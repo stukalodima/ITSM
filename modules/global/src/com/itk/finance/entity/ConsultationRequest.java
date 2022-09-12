@@ -1,5 +1,6 @@
 package com.itk.finance.entity;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
@@ -57,6 +58,20 @@ public class ConsultationRequest extends StandardEntity {
     @JoinColumn(name = "ISSUES_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Issue issue;
+
+    @JoinColumn(name = "PROJECT_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup, open, clear"})
+    private Project project;
+
+    @JoinColumn(name = "ASSET_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup, open, clear"})
+    private Asset asset;
+
+    @Composition
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultationRequest")
+    private List<ConsultationRequestFile> consultationRequestFiles;
 
     public String getNumber() {
         return number;
@@ -121,6 +136,30 @@ public class ConsultationRequest extends StandardEntity {
     public void setIssue(Issue issue) {
         this.issue = issue;
     }
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+    public List<ConsultationRequestFile> getConsultationRequestFiles() {
+        return consultationRequestFiles;
+    }
+
+    public void setConsultationRequestFiles(List<ConsultationRequestFile> consultationRequestFiles) {
+        this.consultationRequestFiles = consultationRequestFiles;
+    }
+
     @PostConstruct
     public void initEntity() {
         TimeSource timeSource = AppBeans.get(TimeSource.class);
