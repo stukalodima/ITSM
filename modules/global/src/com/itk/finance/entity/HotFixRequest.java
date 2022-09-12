@@ -1,5 +1,6 @@
 package com.itk.finance.entity;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
@@ -14,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "FINANCE_HOT_FIX_REQUEST")
 @Entity(name = "finance_HotFixRequest")
@@ -67,6 +69,18 @@ public class HotFixRequest extends StandardEntity {
         TimeSource timeSource = AppBeans.get(TimeSource.class);
                 onDate = timeSource.currentTimestamp();
    }
+
+   @Composition
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "hotFixRequest")
+   private List<HotFixRequestFile> hotFixRequestFiles;
+
+    public List<HotFixRequestFile> getHotFixRequestFiles() {
+        return hotFixRequestFiles;
+    }
+
+    public void setHotFixRequestFiles(List<HotFixRequestFile> hotFixRequestFiles) {
+        this.hotFixRequestFiles = hotFixRequestFiles;
+    }
 
     public Long getNumber() {
         return number;
