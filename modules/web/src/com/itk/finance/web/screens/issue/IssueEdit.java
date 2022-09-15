@@ -2,15 +2,11 @@ package com.itk.finance.web.screens.issue;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.app.core.file.FileDownloadHelper;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.DataContext;
-import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.security.entity.User;
@@ -41,24 +37,12 @@ public class IssueEdit extends StandardEditor<Issue> {
     private DataContext dataContext;
     @Inject
     private CollectionPropertyContainer<IssueFile> issueFilesDc;
-    @Inject
-    private EntityStates entityStates;
-    @Inject
-    private Dialogs dialogs;
-    @Inject
-    private UiComponents uiComponents;
-    @Inject
-    private Screens screens;
-    @Inject
-    private ButtonsPanel issueFilesTableButtonsPanel;
 
     private User currentAutor;
     @Inject
     private UserSessionSource userSessionSource;
     @Inject
     private Table<IssueFile> issueFilesTable;
-    @Inject
-    private InstanceContainer<Issue> issueDc;
 
     @Subscribe
     public void onInit(InitEvent event) {
