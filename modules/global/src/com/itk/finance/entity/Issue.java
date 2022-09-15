@@ -7,24 +7,27 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.security.entity.User;
-
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @PublishEntityChangedEvents
 @Table(name = "FINANCE_ISSUE")
 @Entity(name = "finance_Issue")
-@NamePattern("%s %s|onDate,number")
+@NamePattern("#getCaption|onDate,number")
 public class Issue extends StandardEntity {
     private static final long serialVersionUID = -2476676865281350898L;
-    @Temporal(TemporalType.TIMESTAMP)
     @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ON_DATE")
     private Date onDate;
 
@@ -32,6 +35,7 @@ public class Issue extends StandardEntity {
     @Column(name = "NUMBER")
     private String number;
 
+    @NotNull
     @Column(name = "TOPIC")
     @Lob
     private String topic;
@@ -102,6 +106,22 @@ public class Issue extends StandardEntity {
     public void init() {
         this.onDate = AppBeans.get(TimeSource.class).currentTimestamp();
         this.author = AppBeans.get(UserSessionSource.class).getUserSession().getUser();
+    }
+
+    public String getCaption(){
+
+        Messages messages = AppBeans.get(Messages.class);
+
+        //String messageName = messages.getMessage(Issue.class, "Issue");
+        String messageName = "Документ";
+
+        String messageNumber = Objects.isNull(this.number) ? "" : this.number;
+
+        DateFormat format = new SimpleDateFormat("dd.MM.yyy");
+        String messageDate = Objects.isNull(this.onDate) ? "" : format.format(this.onDate);
+
+        return messages.formatMessage(Issue.class, "NamePatternDocument",
+                                        messageName, messageNumber, messageDate);
     }
 
 }
