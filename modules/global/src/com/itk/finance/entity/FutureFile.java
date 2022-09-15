@@ -10,11 +10,11 @@ import com.haulmont.cuba.security.entity.User;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "FINANCE_ISSUE_FILE")
-@Entity(name = "finance_IssueFile")
+@Table(name = "FINANCE_FUTURE_FILE")
+@Entity(name = "finance_FutureFile")
 @NamePattern("%s|document")
-public class IssueFile extends StandardEntity {
-    private static final long serialVersionUID = -6424743476416682915L;
+public class FutureFile extends StandardEntity {
+    private static final long serialVersionUID = -2513446595151493172L;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,16 +22,16 @@ public class IssueFile extends StandardEntity {
     private FileDescriptor document;
 
     @NotNull
-    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    @Lookup(type = LookupType.SCREEN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHOR_ID")
     private User author;
 
     @NotNull
-    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    @Lookup(type = LookupType.SCREEN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ISSUE_ID")
-    private Issue issue;
+    @JoinColumn(name = "FUTURE_ID")
+    private Future future;
 
     public FileDescriptor getDocument() {
         return document;
@@ -41,19 +41,19 @@ public class IssueFile extends StandardEntity {
         this.document = document;
     }
 
-    public Issue getIssue() {
-        return issue;
-    }
-
-    public void setIssue(Issue issue) {
-        this.issue = issue;
-    }
-
     public User getAuthor() {
         return author;
     }
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public Future getFuture() {
+        return future;
+    }
+
+    public void setFuture(Future future) {
+        this.future = future;
     }
 }
