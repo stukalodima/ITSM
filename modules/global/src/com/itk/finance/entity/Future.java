@@ -5,17 +5,21 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.security.entity.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.xml.crypto.Data;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Table(name = "FINANCE_FUTURE")
 @Entity(name = "finance_Future")
-@NamePattern("%s - %s|onDate, number")
+@NamePattern("#getCaption|onDate, number")
 public class Future extends StandardEntity {
     private static final long serialVersionUID = 6135071481727526548L;
 
@@ -76,7 +80,7 @@ public class Future extends StandardEntity {
 
     @Composition
     @OneToMany(mappedBy = "future")
-    private List<FutureFile> futureFiles;
+    private List<FutureFile> futureFileList;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "EMPLOYMANTDATE")
@@ -178,12 +182,12 @@ public class Future extends StandardEntity {
         return implementer;
     }
 
-    public List<FutureFile> getFutureFiles() {
-        return futureFiles;
+    public List<FutureFile> getFutureFileList() {
+        return futureFileList;
     }
 
-    public void setFutureFiles(List<FutureFile> futureFiles) {
-        this.futureFiles = futureFiles;
+    public void setFutureFileList(List<FutureFile> futureFileList) {
+        this.futureFileList = futureFileList;
     }
 
     public void setImplementer(User implementer) {
@@ -192,5 +196,17 @@ public class Future extends StandardEntity {
 
     public void setEmploymentDate(Date employmentDate) {
         this.employmentDate = employmentDate;
+    }
+
+    public String getCaption(){
+        Messages messages = AppBeans.get(Messages.class);
+
+        String messageName = messages.getMessage(Future.class, "com.itk.finance.entity.Future.Name");
+        String messageNumber = Objects.isNull(this.number) ? "" : this.number;
+
+        DateFormat format = new SimpleDateFormat("dd.MM.yyy");
+        String messageDate = Objects.isNull(this.onDate) ? "" : format.format(this.onDate);
+        return messages.formatMessage(Future.class, "NamePatternFutureName",
+                messageName, messageNumber, messageDate);
     }
 }
