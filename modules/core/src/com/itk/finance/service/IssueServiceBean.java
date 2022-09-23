@@ -32,7 +32,8 @@ public class IssueServiceBean implements IssueService {
         consultationRequest.setBusiness(userPropertyService.getDefaultBusiness());
         consultationRequest.setCompany(userPropertyService.getDefaultCompany());
         consultationRequest.setIssue(issue);
-        consultationRequest.setDetailedDescription(issue.getDescription());
+        consultationRequest.setTopic(issue.getTopic());
+        consultationRequest.setDescription(issue.getDescription());
 
         return consultationRequest;
     }

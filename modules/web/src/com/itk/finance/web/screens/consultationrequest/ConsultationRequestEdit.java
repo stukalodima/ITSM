@@ -10,7 +10,6 @@ import com.haulmont.cuba.gui.components.LookupPickerField;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.settings.Settings;
 import com.itk.finance.entity.*;
 
 import javax.inject.Inject;
@@ -52,11 +51,11 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue().isEmpty()) {
-            long newNumber = uniqueNumbersService.getNextNumber(ConsultationRequest.class.getSimpleName());
-            getEditedEntity().setNumber(Long.toString(newNumber));
-            event.resume();
-        }
+//        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue().isEmpty()) {
+//            long newNumber = uniqueNumbersService.getNextNumber(ConsultationRequest.class.getSimpleName());
+//            getEditedEntity().setNumber(Long.toString(newNumber));
+//            event.resume();
+//        }
     }
 
     private void refreshForm() {
@@ -93,7 +92,7 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
                     issue.setOnDate(timeSource.currentTimestamp());
                     issue.setBusiness(getEditedEntity().getBusiness());
                     issue.setCompany(getEditedEntity().getCompany());
-                    issue.setDescription(getEditedEntity().getDetailedDescription());
+                    issue.setDescription(getEditedEntity().getDescription());
                 })
                 //.withLaunchMode(OpenMode.DIALOG)
                 .build();

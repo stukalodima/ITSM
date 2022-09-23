@@ -5,6 +5,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -13,8 +14,11 @@ import com.haulmont.cuba.security.entity.User;
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
+@PublishEntityChangedEvents
 @Table(name = "FINANCE_CONSULTATION_REQUEST")
 @Entity(name = "finance_ConsultationRequest")
 @NamePattern("%s %s |number,onDate")
@@ -56,8 +60,8 @@ public class ConsultationRequest extends StandardEntity {
     private String topic;
 
     @Lob
-    @Column(name = "DETAILED_DESCRIPTION")
-    protected String detailedDescription;
+    @Column(name = "DESCRIPTION")
+    protected String description;
 
     @JoinColumn(name = "ISSUES_ID")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,16 +69,16 @@ public class ConsultationRequest extends StandardEntity {
 
     @JoinColumn(name = "PROJECT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup, open, clear"})
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup, open, clear")
     private Project project;
 
     @JoinColumn(name = "ASSET_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup, open, clear"})
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup, open, clear")
     private Asset asset;
 
     @Composition
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "consultationRequest")
+    @OneToMany(mappedBy = "consultationRequest")
     private List<ConsultationRequestFile> consultationRequestFiles;
 
     public String getNumber() {
@@ -125,12 +129,12 @@ public class ConsultationRequest extends StandardEntity {
         this.executor = executor;
     }
 
-    public String getDetailedDescription() {
-        return detailedDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDetailedDescription(String detailedDescription) {
-        this.detailedDescription = detailedDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Issue getIssue() {
@@ -179,4 +183,5 @@ public class ConsultationRequest extends StandardEntity {
         UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.class);
         author = userSessionSource.getUserSession().getUser();
     }
+
 }
