@@ -573,8 +573,8 @@ create table FINANCE_ISSUE (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    ON_DATE date,
-    NUMBER bigint,
+    ON_DATE timestamp,
+    NUMBER varchar(255),
     TOPIC longvarchar,
     DESCRIPTION longvarchar,
     AUTHOR_ID varchar(36),
@@ -594,6 +594,7 @@ create table FINANCE_ISSUE_FILE (
     DELETED_BY varchar(50),
     --
     DOCUMENT_ID varchar(36),
+    AUTHOR_ID varchar(36),
     ISSUE_ID varchar(36),
     --
     primary key (ID)
