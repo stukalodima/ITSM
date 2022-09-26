@@ -5,6 +5,7 @@ import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.itk.finance.entity.Business;
 import com.itk.finance.entity.Company;
 import com.itk.finance.service.CompanyService;
 
@@ -25,6 +26,8 @@ public class CompanyBrowse extends StandardLookup<Company> {
     @Inject
     private Messages messages;
 
+    private Business business;
+
     @Subscribe("companiesTable.getCompanyList")
     public void onCompaniesTableGetCompanyList(Action.ActionPerformedEvent event) {
         try {
@@ -36,6 +39,16 @@ public class CompanyBrowse extends StandardLookup<Company> {
                             + "\n" + e.getMessage())
                     .show();
         }
+        companiesDl.load();
+    }
+
+    public void setBusiness(Business business) {
+        this.business = business;
+    }
+    @Subscribe
+    public void onBeforeShow(BeforeShowEvent event) {
+
+        companiesDl.setParameter("paramBusiness", business);
         companiesDl.load();
     }
 }

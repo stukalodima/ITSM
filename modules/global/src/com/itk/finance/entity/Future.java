@@ -5,10 +5,13 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.security.entity.User;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
@@ -17,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@PublishEntityChangedEvents
 @Table(name = "FINANCE_FUTURE")
 @Entity(name = "finance_Future")
 @NamePattern("#getCaption|onDate, number")
@@ -44,8 +48,8 @@ public class Future extends StandardEntity {
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BUSINESSOPERATOR_ID")
-    private BusinessOperators businessOperatorID;
+    @JoinColumn(name = "BUSINESS_ID")
+    private Business businessID;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -126,12 +130,12 @@ public class Future extends StandardEntity {
         this.companyID = companyID;
     }
 
-    public BusinessOperators getBusinessOperatorID() {
-        return businessOperatorID;
+    public Business getBusinessID() {
+        return businessID;
     }
 
-    public void setBusinessOperatorID(BusinessOperators businessOperatorID) {
-        this.businessOperatorID = businessOperatorID;
+    public void setBusinessID(Business businessID) {
+        this.businessID = businessID;
     }
 
     public Project getProjectID() {
@@ -198,15 +202,20 @@ public class Future extends StandardEntity {
         this.employmentDate = employmentDate;
     }
 
+    @PostConstruct
+    public void init(){
+        this.onDate = AppBeans.get(TimeSource.class).currentTimestamp();
+    }
+
     public String getCaption(){
         Messages messages = AppBeans.get(Messages.class);
 
-        String messageName = messages.getMessage(Future.class, "com.itk.finance.entity.Future.Name");
+        String messageName = messages.getMessage(Future.class, "Future.Name");
         String messageNumber = Objects.isNull(this.number) ? "" : this.number;
 
         DateFormat format = new SimpleDateFormat("dd.MM.yyy");
         String messageDate = Objects.isNull(this.onDate) ? "" : format.format(this.onDate);
-        return messages.formatMessage(Future.class, "NamePatternFutureName",
+        return messages.formatMessage(Future.class, "Future.PatternFutureName",
                 messageName, messageNumber, messageDate);
     }
 }
