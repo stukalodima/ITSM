@@ -96,7 +96,7 @@ public class FutureEdit extends StandardEditor<Future> {
 
     @Subscribe
     public void onInit(InitEvent event) {
-//        FileDownloadHelper.initGeneratedColumn(futureFilesTable, "document");
+        FileDownloadHelper.initGeneratedColumn(futureFilesTable, "document");
 
         currentAutor = userSessionSource.getUserSession().getUser();
 
