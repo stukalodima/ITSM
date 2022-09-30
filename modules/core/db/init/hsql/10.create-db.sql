@@ -623,3 +623,43 @@ create table FINANCE_ISSUE_FILE (
     primary key (ID)
 )^
 -- end FINANCE_ISSUE_FILE
+-- begin FINANCE_HOT_FIX_REQUEST
+create table FINANCE_HOT_FIX_REQUEST (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NUMBER bigint,
+    DATE date,
+    ISSUE_ID varchar(36) not null,
+    COMPANY_ID varchar(36),
+    BUSINESS_ID varchar(36),
+    DESCRIPTION longvarchar,
+    EXECUTOR_ID varchar(36),
+    START_DATE date,
+    --
+    primary key (ID)
+)^
+-- end FINANCE_HOT_FIX_REQUEST
+-- begin FINANCE_HOT_FIX_REQUEST_FILE
+create table FINANCE_HOT_FIX_REQUEST_FILE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    DOCUMENT_ID varchar(36),
+    HOT_FIX_REQUEST_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_HOT_FIX_REQUEST_FILE
