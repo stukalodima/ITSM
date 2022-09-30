@@ -1,0 +1,2 @@
+alter table FINANCE_PROJECT add constraint FK_FINANCE_PROJECT_ON_ASSET foreign key (ASSET_ID) references FINANCE_ASSET(ID);
+create index IDX_FINANCE_PROJECT_ON_ASSET on FINANCE_PROJECT (ASSET_ID);
