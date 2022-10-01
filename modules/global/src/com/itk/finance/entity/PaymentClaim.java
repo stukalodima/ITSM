@@ -267,7 +267,7 @@ public class PaymentClaim extends StandardEntity {
         author = userSessionSource.getUserSession().getUser();
         business = userPropertyService.getDefaultBusiness();
         company = userPropertyService.getDefaultCompany();
-        status = procPropertyService.getNewStatus();
+//        status = procPropertyService.getNewStatus();
         onDate = timeSource.currentTimestamp();
         planPaymentDate = new Date(timeSource.currentTimeMillis() + 24 * 60 * 60 * 1000);
     }

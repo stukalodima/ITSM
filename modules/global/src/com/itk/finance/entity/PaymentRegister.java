@@ -152,7 +152,7 @@ public class PaymentRegister extends StandardEntity {
         onDate = timeSource.currentTimestamp();
         business = userPropertyService.getDefaultBusiness();
         author = userSession.getUser();
-        status = procPropertyService.getNewStatus();
+        //status = procPropertyService.getNewStatus();
     }
 
     public String calcSummaPaymentClaim(Set<PaymentRegisterDetail> paymentRegisterDetails) {
