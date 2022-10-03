@@ -39,43 +39,43 @@ public class Future extends StandardEntity {
     @Lookup(type = LookupType.SCREEN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ISSUE_ID")
-    private Issue issueID;
+    private Issue issue;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID")
-    private Company companyID;
+    private Company company;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUSINESS_ID")
-    private Business businessID;
+    private Business business;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROJECT_ID")
-    private Project projectID;
+    private Project project;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSET_ID")
-    private Asset assetID;
+    private Asset asset;
 
     @Column(name = "DESCRIPTION")
     @Lob
     private String description;
 
-    @Column(name = "TIMEESTIMATE")
+    @Column(name = "TIME_ESTIMATE")
     private Double timeEstimate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "PLANDATE")
+    @Column(name = "PLAN_DATE")
     private Date planDate;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUSE_ID")
-    private Statuses statuse;
+    @JoinColumn(name = "STATUS_ID")
+    private Statuses status;
 
     @Lookup(type = LookupType.SCREEN, actions = {"lookup", "open", "clear"})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -87,7 +87,7 @@ public class Future extends StandardEntity {
     private List<FutureFile> futureFileList;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "EMPLOYMANTDATE")
+    @Column(name = "EMPLOYMANT_DATE")
     private Date employmentDate;
 
     public Date getOnDate() {
@@ -114,44 +114,44 @@ public class Future extends StandardEntity {
         this.number = number;
     }
 
-    public Issue getIssueID() {
-        return issueID;
+    public Issue getIssue() {
+        return issue;
     }
 
-    public void setIssueID(Issue issueID) {
-        this.issueID = issueID;
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 
-    public Company getCompanyID() {
-        return companyID;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyID(Company companyID) {
-        this.companyID = companyID;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
-    public Business getBusinessID() {
-        return businessID;
+    public Business getBusiness() {
+        return business;
     }
 
-    public void setBusinessID(Business businessID) {
-        this.businessID = businessID;
+    public void setBusiness(Business business) {
+        this.business = business;
     }
 
-    public Project getProjectID() {
-        return projectID;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectID(Project projectID) {
-        this.projectID = projectID;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public Asset getAssetID() {
-        return assetID;
+    public Asset getAsset() {
+        return asset;
     }
 
-    public void setAssetID(Asset assetID) {
-        this.assetID = assetID;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
     public String getDescription() {
@@ -174,12 +174,12 @@ public class Future extends StandardEntity {
         this.planDate = planDate;
     }
 
-    public Statuses getStatuse() {
-        return statuse;
+    public Statuses getStatus() {
+        return status;
     }
 
-    public void setStatuse(Statuses statuse) {
-        this.statuse = statuse;
+    public void setStatus(Statuses status) {
+        this.status = status;
     }
 
     public User getImplementer() {

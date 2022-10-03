@@ -16,7 +16,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @PublishEntityChangedEvents
 @Table(name = "FINANCE_CONSULTATION_REQUEST")
@@ -50,10 +49,10 @@ public class ConsultationRequest extends StandardEntity {
     @NotNull
     private User author;
 
-    @JoinColumn(name = "EXECUTOR_ID")
+    @JoinColumn(name = "ASSIGNED_TO_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private User executor;
+    private User assignedTo;
 
     @Lob
     @Column(name = "TOPIC")
@@ -63,7 +62,7 @@ public class ConsultationRequest extends StandardEntity {
     @Column(name = "DESCRIPTION")
     protected String description;
 
-    @JoinColumn(name = "ISSUES_ID")
+    @JoinColumn(name = "ISSUE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Issue issue;
 
@@ -121,12 +120,12 @@ public class ConsultationRequest extends StandardEntity {
         this.author = author;
     }
 
-    public User getExecutor() {
-        return executor;
+    public User getAssignedTo() {
+        return assignedTo;
     }
 
-    public void setExecutor(User executor) {
-        this.executor = executor;
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
     }
 
     public String getDescription() {

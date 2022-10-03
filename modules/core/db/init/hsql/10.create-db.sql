@@ -573,14 +573,14 @@ create table FINANCE_PROJECT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NAME varchar(100) not null,
+    NAME varchar(255),
     PARENT_ID varchar(36),
     NOT_RELEVANT boolean,
     SHUT boolean,
     START_DATE date,
     END_DATE date,
     MANAGER_ID varchar(36),
-    DESCRIPTION varchar(250),
+    DESCRIPTION longvarchar,
     --
     primary key (ID)
 )^
@@ -639,10 +639,10 @@ create table FINANCE_CONSULTATION_REQUEST (
     BUSINESS_ID varchar(36),
     COMPANY_ID varchar(36),
     AUTHOR_ID varchar(36),
-    EXECUTOR_ID varchar(36),
+    ASSIGNED_TO_ID varchar(36),
     TOPIC longvarchar,
     DESCRIPTION longvarchar,
-    ISSUES_ID varchar(36),
+    ISSUE_ID varchar(36),
     PROJECT_ID varchar(36),
     ASSET_ID varchar(36),
     --
@@ -672,29 +672,6 @@ create table FINANCE_HOT_FIX_REQUEST (
     primary key (ID)
 )^
 -- end FINANCE_HOT_FIX_REQUEST
--- begin FINANCE_PROJECT
-create table FINANCE_PROJECT (
-    ID varchar(36) not null,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    NAME varchar(255),
-    PARENT_ID varchar(36),
-    NOT_RELEVANT boolean,
-    SHUT boolean,
-    START_DATE date,
-    END_DATE date,
-    MANAGER_ID varchar(36),
-    DESCRIPTION longvarchar,
-    --
-    primary key (ID)
-)^
--- end FINANCE_PROJECT
 -- begin FINANCE_CONSULTATION_REQUEST_FILE
 create table FINANCE_CONSULTATION_REQUEST_FILE (
     ID varchar(36) not null,
@@ -730,3 +707,65 @@ create table FINANCE_HOT_FIX_REQUEST_FILE (
     primary key (ID)
 )^
 -- end FINANCE_HOT_FIX_REQUEST_FILE
+-- begin FINANCE_EXECUTION_STATE
+create table FINANCE_EXECUTION_STATE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NAME varchar(255),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_EXECUTION_STATE
+-- begin FINANCE_FUTURE
+create table FINANCE_FUTURE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ON_DATE date,
+    NUMBER varchar(255),
+    ISSUE_ID varchar(36),
+    COMPANY_ID varchar(36),
+    BUSINESS_ID varchar(36),
+    PROJECT_ID varchar(36),
+    ASSET_ID varchar(36),
+    DESCRIPTION longvarchar,
+    TIME_ESTIMATE double precision,
+    PLAN_DATE date,
+    STATUS_ID varchar(36),
+    IMPLEMENTER_ID varchar(36),
+    EMPLOYMANT_DATE date,
+    --
+    primary key (ID)
+)^
+-- end FINANCE_FUTURE
+-- begin FINANCE_FUTURE_FILE
+create table FINANCE_FUTURE_FILE (
+    ID varchar(36) not null,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    DOCUMENT_ID varchar(36),
+    AUTHOR_ID varchar(36),
+    FUTURE_ID varchar(36),
+    --
+    primary key (ID)
+)^
+-- end FINANCE_FUTURE_FILE

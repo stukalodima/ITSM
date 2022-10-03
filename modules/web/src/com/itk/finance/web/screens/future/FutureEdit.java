@@ -4,9 +4,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.app.core.file.FileDownloadHelper;
-import com.haulmont.cuba.gui.app.core.file.MultiUploader;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.DataContext;
@@ -17,8 +15,6 @@ import com.haulmont.cuba.security.entity.User;
 import com.itk.finance.web.screens.asset.AssetBrowse;
 import com.itk.finance.web.screens.company.CompanyBrowse;
 import com.itk.finance.web.screens.issue.IssueEdit;
-import groovyjarjarpicocli.CommandLine;
-import sun.security.mscapi.CPublicKey;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,15 +27,13 @@ import java.util.UUID;
 @LoadDataBeforeShow
 public class FutureEdit extends StandardEditor<Future> {
     @Inject
-    private Screens screens;
-    @Inject
     private DataManager dataManager;
     @Inject
     private DataContext dataContext;
     @Inject
     private CollectionPropertyContainer<FutureFile> futureFileDc;
 
-    private User currentAutor;
+    private User currentAuthor;
     @Inject
     private Messages messages;
     @Inject
@@ -55,42 +49,42 @@ public class FutureEdit extends StandardEditor<Future> {
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
-    private LookupPickerField<Company> companyIDField;
+    private LookupPickerField<Company> companyField;
     @Inject
-    private LookupPickerField<Asset> assetIDField;
+    private LookupPickerField<Asset> assetField;
 
-    @Subscribe("companyIDField.lookup")
-    public void onCompanyIDFieldLookup(Action.ActionPerformedEvent event) {
-        CompanyBrowse companyBrowse = screenBuilders.lookup(companyIDField)
+    @Subscribe("companyField.lookup")
+    public void onCompanyFieldLookup(Action.ActionPerformedEvent event) {
+        CompanyBrowse companyBrowse = screenBuilders.lookup(companyField)
                 .withScreenClass(CompanyBrowse.class)
                 .build();
-        companyBrowse.setBusiness(getEditedEntity().getBusinessID());
+        companyBrowse.setBusiness(getEditedEntity().getBusiness());
         companyBrowse.show();
     }
 
-    @Subscribe("businessIDField")
-    public void onBusinessIDFieldValueChange(HasValue.ValueChangeEvent<Business> event) {
-        if (event.isUserOriginated()) {
-            getEditedEntity().setCompanyID(null);
-            getEditedEntity().setAssetID(null);
-            getEditedEntity().setProjectID(null);
-        }
-    }
-
-    @Subscribe("companyIDField")
-    public void onCompanyIDFieldValueChange(HasValue.ValueChangeEvent<Company> event) {
+    @Subscribe("companyField")
+    public void onCompanyFieldValueChange(HasValue.ValueChangeEvent<Company> event) {
         if(event.isUserOriginated()){
-            getEditedEntity().setAssetID(null);
-            getEditedEntity().setProjectID(null);
+            getEditedEntity().setAsset(null);
+            getEditedEntity().setProject(null);
         }
     }
 
-    @Subscribe("assetIDField.lookup")
-    public void onAssetIDFieldLookup(Action.ActionPerformedEvent event) {
-        AssetBrowse assetBrowse = screenBuilders.lookup(assetIDField)
+    @Subscribe("businessField")
+    public void onBusinessFieldValueChange(HasValue.ValueChangeEvent<Business> event) {
+        if (event.isUserOriginated()) {
+            getEditedEntity().setCompany(null);
+            getEditedEntity().setAsset(null);
+            getEditedEntity().setProject(null);
+        }
+    }
+
+    @Subscribe("assetField.lookup")
+    public void onAssetFieldLookup(Action.ActionPerformedEvent event) {
+        AssetBrowse assetBrowse = screenBuilders.lookup(assetField)
                 .withScreenClass(AssetBrowse.class)
                 .build();
-        assetBrowse.setCompany(getEditedEntity().getCompanyID());
+        assetBrowse.setCompany(getEditedEntity().getCompany());
         assetBrowse.show();
     }
 
@@ -98,7 +92,7 @@ public class FutureEdit extends StandardEditor<Future> {
     public void onInit(InitEvent event) {
         FileDownloadHelper.initGeneratedColumn(futureFilesTable, "document");
 
-        currentAutor = userSessionSource.getUserSession().getUser();
+        currentAuthor = userSessionSource.getUserSession().getUser();
 
         fileUpload.addQueueUploadCompleteListener(queueUploadCompleteEvent -> {
             for (Map.Entry<UUID, String> entry : fileUpload.getUploadsMap().entrySet()) {
@@ -119,7 +113,7 @@ public class FutureEdit extends StandardEditor<Future> {
                 futureFile = dataContext.merge(futureFile);
                 futureFile.setFuture(getEditedEntity());
                 futureFile.setDocument(fd);
-                futureFile.setAuthor(currentAutor);
+                futureFile.setAuthor(currentAuthor);
                 List<FutureFile> futureFileList = futureFileDc.getMutableItems();
                 futureFileList.add(futureFile);
             }

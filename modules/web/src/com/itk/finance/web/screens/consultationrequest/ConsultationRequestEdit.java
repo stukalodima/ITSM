@@ -5,10 +5,7 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.app.core.file.FileDownloadHelper;
-import com.haulmont.cuba.gui.components.FileMultiUploadField;
-import com.haulmont.cuba.gui.components.HasValue;
-import com.haulmont.cuba.gui.components.LookupPickerField;
-import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.DataContext;
@@ -16,6 +13,8 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.security.entity.User;
 import com.itk.finance.entity.*;
+import com.itk.finance.web.screens.asset.AssetBrowse;
+import com.itk.finance.web.screens.company.CompanyBrowse;
 import com.itk.finance.web.screens.issue.IssueEdit;
 
 import javax.inject.Inject;
@@ -37,8 +36,6 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
     @Inject
     private LookupPickerField<Company> companyField;
     @Inject
-    private EntityStates entityStates;
-    @Inject
     private ScreenBuilders screenBuilders;
     @Inject
     private UserSessionSource userSessionSource;
@@ -58,13 +55,15 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
     private CollectionPropertyContainer<ConsultationRequestFile> consultationRequestFilesDc;
     @Inject
     private Table<ConsultationRequestFile> consultationRequestFilesTable;
+    @Inject
+    private LookupPickerField<Asset> assetField;
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
         businessesDl.load();
         refreshForm();
-        if (entityStates.isNew(getEditedEntity())){
-        }
+//        if (entityStates.isNew(getEditedEntity())){
+//        }
     }
 
     @Subscribe
@@ -73,11 +72,6 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-//        if (entityStates.isNew(getEditedEntity()) || Objects.isNull(numberField.getValue()) || numberField.getValue().isEmpty()) {
-//            long newNumber = uniqueNumbersService.getNextNumber(ConsultationRequest.class.getSimpleName());
-//            getEditedEntity().setNumber(Long.toString(newNumber));
-//            event.resume();
-//        }
     }
 
     private void refreshForm() {
@@ -94,6 +88,14 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
             refreshForm();
         }
     }
+    @Subscribe("companyField.lookup")
+    public void onCompanyFieldLookup(Action.ActionPerformedEvent event) {
+        CompanyBrowse companyBrowse = screenBuilders.lookup(companyField)
+                .withScreenClass(CompanyBrowse.class)
+                .build();
+        companyBrowse.setBusiness(getEditedEntity().getBusiness());
+        companyBrowse.show();
+    }
 
     @Subscribe("companyField")
     public void onCompanyFieldFieldValueChange(HasValue.ValueChangeEvent<Company> event) {
@@ -103,6 +105,15 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
             }
             refreshForm();
         }
+    }
+
+    @Subscribe("assetField.lookup")
+    public void onAssetFieldLookup(Action.ActionPerformedEvent event) {
+        AssetBrowse assetBrowse = screenBuilders.lookup(assetField)
+                .withScreenClass(AssetBrowse.class)
+                .build();
+        assetBrowse.setCompany(getEditedEntity().getCompany());
+        assetBrowse.show();
     }
 
     public void addNewHotFixRequest() {
@@ -123,7 +134,6 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
 
     @Subscribe
     public void onInit(InitEvent event) {
-
         FileDownloadHelper.initGeneratedColumn(consultationRequestFilesTable, "document");
 
         User currentAuthor = userSessionSource.getUserSession().getUser();
@@ -157,4 +167,10 @@ public class ConsultationRequestEdit extends StandardEditor<ConsultationRequest>
                 .create(Notifications.NotificationType.ERROR)
                 .withCaption(messages.getMessage(IssueEdit.class, "issueEdit.fileUpload.loadError")).show());
     }
+
+    @Subscribe(target = Target.DATA_CONTEXT)
+    public void onPostCommit(DataContext.PostCommitEvent event) {
+        FileDownloadHelper.initGeneratedColumn(consultationRequestFilesTable, "document");
+    }
+
 }
