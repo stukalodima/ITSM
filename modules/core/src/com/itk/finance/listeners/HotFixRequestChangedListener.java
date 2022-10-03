@@ -22,7 +22,6 @@ public class HotFixRequestChangedListener {
 
     @EventListener
     public void beforePersist(EntityPersistingEvent<HotFixRequest> event) {
-        event.getEntity().setNumber(uniqueNumbersAPI.getNextNumber(event.getEntity().getClass().getSimpleName()));
-
+        event.getEntity().setNumber(String.valueOf(uniqueNumbersAPI.getNextNumber(event.getEntity().getClass().getSimpleName())));
     }
 }

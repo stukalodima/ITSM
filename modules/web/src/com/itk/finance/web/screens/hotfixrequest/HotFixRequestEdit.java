@@ -2,28 +2,20 @@ package com.itk.finance.web.screens.hotfixrequest;
 
 import com.haulmont.cuba.core.app.UniqueNumbersService;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.EntityStates;
-import com.haulmont.cuba.core.global.FileStorageException;
-import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.components.FileMultiUploadField;
-import com.haulmont.cuba.gui.components.HasValue;
-import com.haulmont.cuba.gui.components.LookupPickerField;
-import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.DataContext;
+import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.itk.finance.entity.*;
 import com.itk.finance.web.screens.hotfixrequest.HotFixRequestEdit;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @UiController("finance_HotFixRequest.edit")
 @UiDescriptor("hot-fix-request-edit.xml")
@@ -42,10 +34,7 @@ public class HotFixRequestEdit extends StandardEditor<HotFixRequest> {
 
     @Inject
     private LookupPickerField<Company> companyField;
-    @Inject
-    private TextField<Long> numberField;
-    @Inject
-    private UniqueNumbersService uniqueNumbersService;
+
     @Inject
     private FileMultiUploadField fileUpload;
     @Inject
@@ -60,6 +49,11 @@ public class HotFixRequestEdit extends StandardEditor<HotFixRequest> {
     private CollectionPropertyContainer<HotFixRequestFile> hotFixRequestFilesDc;
     @Inject
     private Notifications notifications;
+
+
+    public void setDataContext(List toCommitData){
+        dataContext.merge(toCommitData);
+    };
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -86,6 +80,45 @@ public class HotFixRequestEdit extends StandardEditor<HotFixRequest> {
             refreshForm();
         }
     }
+
+    @Subscribe("issueField")
+    public void onIssueFieldValueChange(HasValue.ValueChangeEvent<Issue> event) {
+        if (event.isUserOriginated()) {
+            List<HotFixRequestFile> hotFixRequestFileList = getEditedEntity().getHotFixRequestFiles();
+
+            getIssueFileList(event.getValue(), getViewForDocument())
+                    .forEach(issueFile -> {
+                                HotFixRequestFile hotFixRequestFile = addFileToList(getEditedEntity(),issueFile);
+                                hotFixRequestFileList.add(hotFixRequestFile);
+                            }
+                    );
+
+            getEditedEntity().setHotFixRequestFiles(hotFixRequestFileList);
+
+            }
+            refreshForm();
+        }
+
+    private View getViewForDocument() {
+        View view = new View(IssueFile.class);
+        view.addProperty("document",ViewBuilder.of(FileDescriptor.class).addView("_minimal").build());
+        return view;
+    }
+
+    private List<IssueFile> getIssueFileList(Issue issue, View view) {
+        return dataManager.load(IssueFile.class)
+                .view(view)
+                .query("select e from finance_IssueFile e where e.issue = :reqIssue")
+                .parameter("reqIssue", issue).list();
+    }
+
+    private HotFixRequestFile addFileToList(HotFixRequest hotFixRequest, IssueFile issueFile) {
+        HotFixRequestFile hotFixRequestFile = dataManager.create(HotFixRequestFile.class);
+        hotFixRequestFile.setDocument(issueFile.getDocument());
+        hotFixRequestFile.setHotFixRequest(hotFixRequest);
+        return hotFixRequestFile;
+    }
+
 
     @Subscribe
     public void onInit(InitEvent event) {
