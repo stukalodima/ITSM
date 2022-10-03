@@ -1,5 +1,6 @@
 package com.itk.finance.web.screens.issue;
 
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
@@ -8,8 +9,11 @@ import com.haulmont.cuba.gui.screen.*;
 import com.itk.finance.entity.HotFixRequest;
 import com.itk.finance.entity.Issue;
 import com.itk.finance.service.IssueService;
+import com.itk.finance.web.screens.hotfixrequest.HotFixRequestEdit;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @UiController("finance_Issue.browse")
@@ -34,8 +38,17 @@ public class IssueBrowse extends StandardLookup<Issue> {
             return;
         }
         issueSet.forEach(issue -> {
-            HotFixRequest hotFixRequest = issueService.createHotFixFromIssue(issue);
-            screenBuilders.editor(HotFixRequest.class, this).editEntity(hotFixRequest).build().show();
+            List<StandardEntity> list = issueService.createHotFixFromIssue(issue);
+            HotFixRequestEdit screen = screenBuilders.editor(HotFixRequest.class, this)
+                    .newEntity((HotFixRequest) Objects.requireNonNull(
+                            list.stream().findFirst().filter(
+                                    standardEntity -> standardEntity instanceof HotFixRequest).orElse(null)
+                            )
+                    )
+                    .withScreenClass(HotFixRequestEdit.class)
+                    .build();
+            screen.setDataContext(list);
+            screen.show();
         });
 
     }

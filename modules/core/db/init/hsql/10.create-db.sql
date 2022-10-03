@@ -610,13 +610,14 @@ create table FINANCE_HOT_FIX_REQUEST (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NUMBER bigint,
+    NUMBER varchar(255),
     DATE date,
     ISSUE_ID varchar(36) not null,
     COMPANY_ID varchar(36),
     BUSINESS_ID varchar(36),
     DESCRIPTION longvarchar,
     EXECUTOR_ID varchar(36),
+    ASSET_ID varchar(36),
     START_DATE date,
     --
     primary key (ID)

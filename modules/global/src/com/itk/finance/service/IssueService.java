@@ -1,10 +1,14 @@
 package com.itk.finance.service;
 
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.itk.finance.entity.HotFixRequest;
 import com.itk.finance.entity.Issue;
+
+import java.util.List;
 
 public interface IssueService {
     String NAME = "finance_IssueService";
 
-    HotFixRequest createHotFixFromIssue(Issue issue);
+    List<StandardEntity> createHotFixFromIssue(Issue issue);
 }

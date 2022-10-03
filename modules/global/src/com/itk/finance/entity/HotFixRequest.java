@@ -1,5 +1,6 @@
 package com.itk.finance.entity;
 
+import com.esotericsoftware.kryo.NotNull;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
@@ -13,7 +14,6 @@ import com.haulmont.cuba.security.entity.User;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -23,53 +23,47 @@ import java.util.List;
 @PublishEntityChangedEvents
 public class HotFixRequest extends StandardEntity {
     private static final long serialVersionUID = 8831658319149966013L;
-
     @Column(name = "NUMBER")
-    private Long number;
-
+    private String number;
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE")
     private Date onDate;
-
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ISSUE_ID")
     private Issue issue;
-
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
-
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BUSINESS_ID")
     private Business business;
-
     @Lob
     @Column(name = "DESCRIPTION")
     private String description;
-
-
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXECUTOR_ID")
     private User executor;
-
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "open", "clear"})
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ASSET_ID")
+    private Asset asset;
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
     private Date startDate;
-
     @PostConstruct
     public void initEntity (Metadata metadata){
         TimeSource timeSource = AppBeans.get(TimeSource.class);
                 onDate = timeSource.currentTimestamp();
    }
-
    @Composition
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "hotFixRequest")
    private List<HotFixRequestFile> hotFixRequestFiles;
@@ -82,11 +76,11 @@ public class HotFixRequest extends StandardEntity {
         this.hotFixRequestFiles = hotFixRequestFiles;
     }
 
-    public Long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -146,5 +140,13 @@ public class HotFixRequest extends StandardEntity {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 }
